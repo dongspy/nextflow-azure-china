@@ -879,7 +879,7 @@ class AzBatchService implements Closeable {
             config.storage().fileShares.each {
                 if (it.key) {
                     final String accountName = config.storage().accountName
-                    final endpoint = "https://${config.storage().accountName}.file.core.chinacloudapi.cn/${it.key}" as String
+                    final endpoint = "https://${config.storage().accountName}.file.core.windows.net/${it.key}" as String
                     final accountKey = config.storage().accountKey
                     final shareConfig = new AzureFileShareConfiguration( accountName, endpoint, accountKey, it.key )
                             .setMountOptions(it.value.mountOptions)

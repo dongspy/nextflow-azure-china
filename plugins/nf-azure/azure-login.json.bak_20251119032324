@@ -61,14 +61,14 @@ $ az storage account create --resource-group my-resource-group --name nfaccount 
     "virtualNetworkRules": []
   },
   "primaryEndpoints": {
-    "blob": "https://nfaccount.blob.core.chinacloudapi.cn/",
-    "dfs": "https://nfaccount.dfs.core.chinacloudapi.cn/",
-    "file": "https://nfaccount.file.core.chinacloudapi.cn/",
+    "blob": "https://nfaccount.blob.core.windows.net/",
+    "dfs": "https://nfaccount.dfs.core.windows.net/",
+    "file": "https://nfaccount.file.core.windows.net/",
     "internetEndpoints": null,
     "microsoftEndpoints": null,
-    "queue": "https://nfaccount.queue.core.chinacloudapi.cn/",
-    "table": "https://nfaccount.table.core.chinacloudapi.cn/",
-    "web": "https://nfaccount.z6.web.core.chinacloudapi.cn/"
+    "queue": "https://nfaccount.queue.core.windows.net/",
+    "table": "https://nfaccount.table.core.windows.net/",
+    "web": "https://nfaccount.z6.web.core.windows.net/"
   },
   "primaryLocation": "westeurope",
   "privateEndpointConnections": [],
@@ -76,14 +76,14 @@ $ az storage account create --resource-group my-resource-group --name nfaccount 
   "resourceGroup": "my-resource-group",
   "routingPreference": null,
   "secondaryEndpoints": {
-    "blob": "https://nfaccount-secondary.blob.core.chinacloudapi.cn/",
-    "dfs": "https://nfaccount-secondary.dfs.core.chinacloudapi.cn/",
+    "blob": "https://nfaccount-secondary.blob.core.windows.net/",
+    "dfs": "https://nfaccount-secondary.dfs.core.windows.net/",
     "file": null,
     "internetEndpoints": null,
     "microsoftEndpoints": null,
-    "queue": "https://nfaccount-secondary.queue.core.chinacloudapi.cn/",
-    "table": "https://nfaccount-secondary.table.core.chinacloudapi.cn/",
-    "web": "https://nfaccount-secondary.z6.web.core.chinacloudapi.cn/"
+    "queue": "https://nfaccount-secondary.queue.core.windows.net/",
+    "table": "https://nfaccount-secondary.table.core.windows.net/",
+    "web": "https://nfaccount-secondary.z6.web.core.windows.net/"
   },
   "secondaryLocation": "northeurope",
   "sku": {
@@ -98,19 +98,19 @@ $ az storage account create --resource-group my-resource-group --name nfaccount 
 
 
 Connection string
-BlobEndpoint=https://nfaccount.blob.core.chinacloudapi.cn/;QueueEndpoint=https://nfaccount.queue.core.chinacloudapi.cn/;FileEndpoint=https://nfaccount.file.core.chinacloudapi.cn/;TableEndpoint=https://nfaccount.table.core.chinacloudapi.cn/;SharedAccessSignature=sv=2019-10-10&ss=bfqt&srt=sco&sp=rwdlacupx&se=2020-05-16T04:48:12Z&st=2020-05-15T20:48:12Z&spr=https&sig=9xCn8O%2FxjKroc7YOc9fHffiNOtRaY46spv9VJa4D8pU%3D
+BlobEndpoint=https://nfaccount.blob.core.windows.net/;QueueEndpoint=https://nfaccount.queue.core.windows.net/;FileEndpoint=https://nfaccount.file.core.windows.net/;TableEndpoint=https://nfaccount.table.core.windows.net/;SharedAccessSignature=sv=2019-10-10&ss=bfqt&srt=sco&sp=rwdlacupx&se=2020-05-16T04:48:12Z&st=2020-05-15T20:48:12Z&spr=https&sig=9xCn8O%2FxjKroc7YOc9fHffiNOtRaY46spv9VJa4D8pU%3D
 
 SAS token
 ?sv=2019-10-10&ss=bfqt&srt=sco&sp=rwdlacupx&se=2020-05-16T04:48:12Z&st=2020-05-15T20:48:12Z&spr=https&sig=9xCn8O%2FxjKroc7YOc9fHffiNOtRaY46spv9VJa4D8pU%3D
 
 Blob service SAS URL
-https://nfaccount.blob.core.chinacloudapi.cn/?sv=2019-10-10&ss=bfqt&srt=sco&sp=rwdlacupx&se=2020-05-16T04:48:12Z&st=2020-05-15T20:48:12Z&spr=https&sig=9xCn8O%2FxjKroc7YOc9fHffiNOtRaY46spv9VJa4D8pU%3D
+https://nfaccount.blob.core.windows.net/?sv=2019-10-10&ss=bfqt&srt=sco&sp=rwdlacupx&se=2020-05-16T04:48:12Z&st=2020-05-15T20:48:12Z&spr=https&sig=9xCn8O%2FxjKroc7YOc9fHffiNOtRaY46spv9VJa4D8pU%3D
 
 File service SAS URL
-https://nfaccount.file.core.chinacloudapi.cn/?sv=2019-10-10&ss=bfqt&srt=sco&sp=rwdlacupx&se=2020-05-16T04:48:12Z&st=2020-05-15T20:48:12Z&spr=https&sig=9xCn8O%2FxjKroc7YOc9fHffiNOtRaY46spv9VJa4D8pU%3D
+https://nfaccount.file.core.windows.net/?sv=2019-10-10&ss=bfqt&srt=sco&sp=rwdlacupx&se=2020-05-16T04:48:12Z&st=2020-05-15T20:48:12Z&spr=https&sig=9xCn8O%2FxjKroc7YOc9fHffiNOtRaY46spv9VJa4D8pU%3D
 
 Queue service SAS URL
-https://nfaccount.queue.core.chinacloudapi.cn/?sv=2019-10-10&ss=bfqt&srt=sco&sp=rwdlacupx&se=2020-05-16T04:48:12Z&st=2020-05-15T20:48:12Z&spr=https&sig=9xCn8O%2FxjKroc7YOc9fHffiNOtRaY46spv9VJa4D8pU%3D
+https://nfaccount.queue.core.windows.net/?sv=2019-10-10&ss=bfqt&srt=sco&sp=rwdlacupx&se=2020-05-16T04:48:12Z&st=2020-05-15T20:48:12Z&spr=https&sig=9xCn8O%2FxjKroc7YOc9fHffiNOtRaY46spv9VJa4D8pU%3D
 
 Table service SAS URL
-https://nfaccount.table.core.chinacloudapi.cn/?sv=2019-10-10&ss=bfqt&srt=sco&sp=rwdlacupx&se=2020-05-16T04:48:12Z&st=2020-05-15T20:48:12Z&spr=https&sig=9xCn8O%2FxjKroc7YOc9fHffiNOtRaY46spv9VJa4D8pU%3D
+https://nfaccount.table.core.windows.net/?sv=2019-10-10&ss=bfqt&srt=sco&sp=rwdlacupx&se=2020-05-16T04:48:12Z&st=2020-05-15T20:48:12Z&spr=https&sig=9xCn8O%2FxjKroc7YOc9fHffiNOtRaY46spv9VJa4D8pU%3D

@@ -42,7 +42,7 @@ class AzFileCopyStrategyTest extends Specification {
         uri.toString() >> path
 
         def BLOB_CLIENT = Mock(BlobClient) {
-            getBlobUrl() >> { path.replace('az://', 'http://account.blob.core.chinacloudapi.cn/') }
+            getBlobUrl() >> { path.replace('az://', 'http://account.blob.core.windows.net/') }
         }
 
         def result = GroovyMock(AzPath)
@@ -89,8 +89,8 @@ class AzFileCopyStrategyTest extends Specification {
                 '''.stripIndent()
 
         binding.unstage_controls == '''\
-                nxf_az_upload .command.out 'http://account.blob.core.chinacloudapi.cn/my-data/work/dir' || true
-                nxf_az_upload .command.err 'http://account.blob.core.chinacloudapi.cn/my-data/work/dir' || true
+                nxf_az_upload .command.out 'http://account.blob.core.windows.net/my-data/work/dir' || true
+                nxf_az_upload .command.err 'http://account.blob.core.windows.net/my-data/work/dir' || true
                 '''.stripIndent()
 
         binding.launch_cmd == '/bin/bash -ue .command.sh < .command.in'
@@ -218,7 +218,7 @@ class AzFileCopyStrategyTest extends Specification {
         then:
         binding.stage_inputs == '''\
                 # stage input files
-                nxf_az_download 'http://account.blob.core.chinacloudapi.cn/my-data/work/remote/bin' $PWD/.nextflow-bin
+                nxf_az_download 'http://account.blob.core.windows.net/my-data/work/remote/bin' $PWD/.nextflow-bin
                 chmod +x $PWD/.nextflow-bin/* || true
                 downloads=(true)
                 
@@ -361,9 +361,9 @@ class AzFileCopyStrategyTest extends Specification {
         then:
 
         binding.unstage_controls == '''\
-                nxf_az_upload .command.out 'http://account.blob.core.chinacloudapi.cn/my-data/work/dir' || true
-                nxf_az_upload .command.err 'http://account.blob.core.chinacloudapi.cn/my-data/work/dir' || true
-                nxf_az_upload .command.trace 'http://account.blob.core.chinacloudapi.cn/my-data/work/dir' || true
+                nxf_az_upload .command.out 'http://account.blob.core.windows.net/my-data/work/dir' || true
+                nxf_az_upload .command.err 'http://account.blob.core.windows.net/my-data/work/dir' || true
+                nxf_az_upload .command.trace 'http://account.blob.core.windows.net/my-data/work/dir' || true
                 '''.stripIndent()
 
         binding.stage_inputs == '''\
@@ -371,8 +371,8 @@ class AzFileCopyStrategyTest extends Specification {
                 downloads=(true)
                 rm -f file1.txt
                 rm -f file2.txt
-                downloads+=("nxf_az_download 'http://account.blob.core.chinacloudapi.cn/my-data/work/dir/file1.txt' file1.txt")
-                downloads+=("nxf_az_download 'http://account.blob.core.chinacloudapi.cn/my-data/work/dir/file2.txt' file2.txt")
+                downloads+=("nxf_az_download 'http://account.blob.core.windows.net/my-data/work/dir/file1.txt' file1.txt")
+                downloads+=("nxf_az_download 'http://account.blob.core.windows.net/my-data/work/dir/file2.txt' file2.txt")
                 nxf_parallel "${downloads[@]}"
                 '''.stripIndent()
 
@@ -380,7 +380,7 @@ class AzFileCopyStrategyTest extends Specification {
                     uploads=()
                     IFS=$'\\n'
                     for name in $(eval "ls -1d foo.txt bar.fastq" | sort | uniq); do
-                        uploads+=("nxf_az_upload '$name' 'http://account.blob.core.chinacloudapi.cn/my-data/work/dir'")
+                        uploads+=("nxf_az_upload '$name' 'http://account.blob.core.windows.net/my-data/work/dir'")
                     done
                     unset IFS
                     nxf_parallel "${uploads[@]}"

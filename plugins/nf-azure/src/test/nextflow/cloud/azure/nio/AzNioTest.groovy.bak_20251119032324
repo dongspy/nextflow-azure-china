@@ -43,7 +43,7 @@ class AzNioTest extends Specification implements AzBaseSpec {
         def accountName = System.getenv('AZURE_STORAGE_ACCOUNT_NAME')
         def accountKey = System.getenv('AZURE_STORAGE_ACCOUNT_KEY')
         def credential = new StorageSharedKeyCredential(accountName, accountKey);
-        def  endpoint = String.format(Locale.ROOT, "https://%s.blob.core.chinacloudapi.cn", accountName);
+        def  endpoint = String.format(Locale.ROOT, "https://%s.blob.core.windows.net", accountName);
         storageClient = new BlobServiceClientBuilder().endpoint(endpoint).credential(credential).buildClient();
         and:
         Global.session = Mock(Session) { getConfig()>>Map.of() }
