@@ -1,3 +1,27 @@
+## 适配 Azure China 21Vianet  Azure-batch
+
+
+因为 nextflow azure-batch 中使用 blob，只能使用 globle cloud，不支持中国区，修改文件中的 core.windows.net 为 core.chinacloudapi.cn.
+
+### 安装(任选其一)
+
+#### 重新安装
+
+```
+git clone git@github.com:dongspy/nextflow-azure-china.git
+cd nextflow-azure-china
+make install
+# 直接在 ~/.nextflow/plugins 生成 nf-azure-1.20.2
+```
+
+#### release version
+
+```
+mv plugins-release/nf-azure-1.20.2/  ~/.nextflow/plugins
+```
+
+
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/_static/nextflow-logo-bg-dark.png">
   <source media="(prefers-color-scheme: light)" srcset="docs/_static/nextflow-logo-bg-light.png">
