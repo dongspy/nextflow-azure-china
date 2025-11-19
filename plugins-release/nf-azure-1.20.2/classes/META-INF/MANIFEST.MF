@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Plugin-Id: nf-azure
+Plugin-Version: 1.20.2
+Plugin-Requires: >=25.09.2-edge
+Plugin-Class: nextflow.cloud.azure.AzurePlugin
+Plugin-Provider: nextflow-io
+Plugin-Description: Enables Azure cloud execution through Batch service 
+ with native Blob storage access and comprehensive authentication option
+ s
+
