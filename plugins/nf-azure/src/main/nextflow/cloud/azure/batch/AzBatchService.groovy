@@ -26,6 +26,13 @@ import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeoutException
 import java.util.function.Predicate
 
+import com.azure.core.credential.AccessToken
+import com.azure.core.credential.TokenRequestContext
+import reactor.core.publisher.Mono
+import com.azure.core.http.policy.BearerTokenAuthenticationPolicy
+import com.azure.core.http.HttpClient
+import com.azure.core.http.HttpPipeline
+import com.azure.core.http.HttpPipelineBuilder
 import com.azure.compute.batch.BatchClient
 import com.azure.compute.batch.BatchClientBuilder
 import com.azure.compute.batch.models.AutoUserScope
@@ -244,7 +251,7 @@ class AzBatchService implements Closeable {
 
         // Calculate weighted scores
         double score = 0.0
-        
+
         // CPU score - heavily weight exact matches
         double cpuScore = Math.abs(cpus - vmCores)
         score += cpuScore * 10  // Give more weight to CPU match
@@ -258,7 +265,7 @@ class AzBatchService implements Closeable {
             score += memScore
         }
 
-        // Disk score if specified  
+        // Disk score if specified
         if( disk ) {
             double diskGb = disk.toGiga()
             if( diskGb > vmDiskGb )
@@ -372,21 +379,38 @@ class AzBatchService implements Closeable {
     }
 
     protected BatchClient createBatchClient() {
-        log.debug "[AZURE BATCH] Executor options=${config.batch()}"
+    log.debug "[AZURE BATCH] Executor options=${config.batch()}"
 
-        final builder = new BatchClientBuilder()
-        if( config.managedIdentity().isConfigured() )
-            builder.credential( createBatchCredentialsWithManagedIdentity() )
-        else if( config.activeDirectory().isConfigured() )
-            builder.credential( createBatchCredentialsWithServicePrincipal() )
-        else if( config.batch().endpoint || config.batch().accountKey || config.batch().accountName )
-            builder.credential( createBatchCredentialsWithKey() )
+    final builder = new BatchClientBuilder()
+    final TokenCredential credential
 
-        if( config.batch().endpoint )
-            builder.endpoint(config.batch().endpoint)
+    if( config.managedIdentity().isConfigured() ) {
+        final credential2 = createBatchCredentialsWithManagedIdentity()
+        final scope = "https://management.core.chinacloudapi.cn/"
 
-        return builder.buildClient()
+        // 创建自定义 pipeline，完全绕过 builder 的默认认证逻辑
+	// 解决使用 MI 提交 batch 不支持chinacloudapi 的问题
+        final pipeline = new HttpPipelineBuilder()
+            .policies(new BearerTokenAuthenticationPolicy(credential2, scope))
+            .httpClient(HttpClient.createDefault())
+            .build()
+
+        final builder2 = new BatchClientBuilder()
+            .endpoint(config.batch().endpoint)
+            .pipeline(pipeline)  // 使用 pipeline() 而不是 credential()
+
+        return builder2.buildClient()
     }
+    else if( config.activeDirectory().isConfigured() )
+        builder.credential( createBatchCredentialsWithServicePrincipal() )
+    else if( config.batch().endpoint || config.batch().accountKey || config.batch().accountName )
+        builder.credential( createBatchCredentialsWithKey() )
+
+    if( config.batch().endpoint )
+        builder.endpoint(config.batch().endpoint)
+
+    return builder.buildClient()
+}
 
     AzTaskKey submitTask(TaskRun task) {
         final poolId = getOrCreatePool(task)
@@ -450,7 +474,7 @@ class AzBatchService implements Closeable {
         if (config.batch().jobMaxWallClockTime) {
             content.setConstraints(createJobConstraints(config.batch().jobMaxWallClockTime))
         }
-        
+
         apply(() -> client.createJob(content))
         return jobId
     }
@@ -514,7 +538,7 @@ class AzBatchService implements Closeable {
             // Create the FusionScriptLauncher from the TaskBean
             final taskBean = task.toTaskBean()
             final launcher = FusionScriptLauncher.create(taskBean, 'az')
-            
+
             // Add container options
             opts += "--privileged "
 
@@ -525,7 +549,7 @@ class AzBatchService implements Closeable {
                     opts += "-e $it.key=$it.value "
                 }
             }
-            
+
             // Get the fusion submit command
             final List<String> cmdList = launcher.fusionSubmitCli(task)
             fusionCmd = cmdList ? String.join(' ', cmdList) : null
@@ -556,7 +580,7 @@ class AzBatchService implements Closeable {
 
     /**
      * Create task constraints based on the task configuration
-     * 
+     *
      * @param task The task run to create constraints for
      * @return The BatchTaskConstraints object
      */
@@ -943,14 +967,14 @@ class AzBatchService implements Closeable {
             // Get pool lifetime since creation.
             lifespan = time() - time("{{poolCreationTime}}");
             interval = TimeInterval_Minute * {{scaleInterval}};
-            
+
             // Compute the target nodes based on pending tasks.
             // \$PendingTasks == The sum of \$ActiveTasks and \$RunningTasks
             \$samples = \$PendingTasks.GetSamplePercent(interval);
             \$tasks = \$samples < 70 ? max(0, \$PendingTasks.GetSample(1)) : max( \$PendingTasks.GetSample(1), avg(\$PendingTasks.GetSample(interval)));
             \$targetVMs = \$tasks > 0 ? \$tasks : max(0, \$TargetDedicatedNodes/2);
             targetPoolSize = max(0, min(\$targetVMs, {{maxVmCount}}));
-            
+
             // For first interval deploy 1 node, for other intervals scale up/down as per tasks.
             \$${target} = lifespan < interval ? {{vmCount}} : targetPoolSize;
             \$NodeDeallocationOption = taskcompletion;
