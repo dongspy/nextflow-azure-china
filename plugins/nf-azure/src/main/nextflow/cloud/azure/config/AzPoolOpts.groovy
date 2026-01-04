@@ -175,6 +175,8 @@ class AzPoolOpts implements CacheFunnel, ConfigScope {
         this.password = opts.password
         this.virtualNetwork = opts.virtualNetwork
         this.lowPriority = opts.lowPriority as boolean
+        // 增加 unverification
+        this.verification = (opts.verification ?: 'verified').toString().toUpperCase() == 'UNVERIFIED'? ImageVerificationType.UNVERIFIED: ImageVerificationType.VERIFIED
     }
 
     @Override
